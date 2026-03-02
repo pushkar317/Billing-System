@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Privacy Billing System</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .subtitle {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .card {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            margin-bottom: 20px;
+        }
+
+        .nav-buttons {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .btn {
+            flex: 1;
+            padding: 15px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .btn-secondary {
+            background: #f0f0f0;
+            color: #333;
+        }
+
+        .section {
+            display: none;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #333;
+            font-weight: 600;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 1rem;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .form-group small {
+            display: block;
+            margin-top: 5px;
+            color: #666;
+            font-size: 0.85rem;
+        }
+
+        .message {
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 20px;
+            text-align: center;
+            font-weight: 500;
+        }
+
+        .message.success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .message.error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .oti-display {
+            margin-top: 30px;
+            text-align: center;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 10px;
+        }
+
+        .oti-display h3 {
+            color: #667eea;
+            margin-bottom: 15px;
+        }
+
+        .oti-code {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #764ba2;
+            letter-spacing: 5px;
+            padding: 20px;
+            background: white;
+            border-radius: 8px;
+            border: 3px dashed #667eea;
+            margin: 10px 0;
+        }
+
+        .oti-note {
+            margin-top: 15px;
+            color: #d63031;
+            font-weight: 600;
+        }
+
+        .receipt-card {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            margin-top: 20px;
+        }
+
+        .receipt-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #e0e0e0;
+        }
+
+        .receipt-header h2 {
+            color: #667eea;
+            font-size: 1.8rem;
+        }
+
+        .receipt-icon {
+            font-size: 2.5rem;
+        }
+
+        .receipt-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 15px 0;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .receipt-row .label {
+            font-weight: 600;
+            color: #666;
+        }
+
+        .receipt-row .value {
+            font-weight: 500;
+            color: #333;
+        }
+
+        .receipt-row .value.amount {
+            font-size: 1.5rem;
+            color: #667eea;
+            font-weight: bold;
+        }
+
+        .receipt-footer {
+            text-align: center;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            margin-top: 20px;
+        }
+
+        .info-card {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        .info-card h3 {
+            color: #667eea;
+            margin-bottom: 15px;
+        }
+
+        .info-card ol {
+            margin-left: 20px;
+            line-height: 1.8;
+        }
+
+        .info-card li {
+            margin-bottom: 10px;
+        }
+
+        @media (max-width: 600px) {
+            .header h1 {
+                font-size: 2rem;
+            }
+
+            .nav-buttons {
+                flex-direction: column;
+            }
+
+            .oti-code {
+                font-size: 2rem;
+                letter-spacing: 3px;
+            }
+        }
+
+        @media print {
+            body {
+                background: white;
+            }
+            .nav-buttons, .btn {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🔒 Privacy-First Restaurant Billing</h1>
+            <p class="subtitle">We respect your privacy. No phone numbers stored.</p>
+        </div>
+
+        <!-- Home Section -->
+        <div id="homeSection" class="section active">
+            <div class="card">
+                <div class="info-card">
+                    <h3>How It Works</h3>
+                    <ol>
+                        <li>Enter your phone number and bill amount</li>
+                        <li>Receive a unique One-Time Identifier (OTI)</li>
+                        <li>Your phone number is NOT saved anywhere</li>
+                        <li>Use the OTI to view your receipt anytime</li>
+                    </ol>
+                </div>
+
+                <div class="nav-buttons">
+                    <button class="btn btn-primary" onclick="showSection('billing')">
+                        Generate New Bill
+                    </button>
+                    <button class="btn btn-secondary" onclick="showSection('verify')">
+                        View Receipt
+                    </button>
+                </div>
+
+                <div style="text-align: center; color: white; margin-top: 20px;">
+                    <p>🛡️ Your data is protected. Phone numbers are never stored.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Billing Section -->
+        <div id="billingSection" class="section">
+            <div class="card">
+                <button class="btn btn-secondary" onclick="showSection('home')" style="margin-bottom: 20px; width: auto;">
+                    ← Back to Home
+                </button>
+
+                <h2 style="color: #667eea; margin-bottom: 20px;">Generate Bill</h2>
+
+                <form id="billingForm" onsubmit="generateBill(event)">
+                    <div class="form-group">
+                        <label for="phone">Phone Number</label>
+                        <input 
+                            type="tel" 
+                            id="phone" 
+                            placeholder="Enter 10-digit phone number" 
+                            required
+                            pattern="[0-9]{10}"
+                            maxlength="10"
+                        >
+                        <small>This will NOT be saved anywhere</small>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="amount">Bill Amount (₹)</label>
+                        <input 
+                            type="number" 
+                            id="amount" 
+                            placeholder="0.00" 
+                            step="0.01" 
+                            min="0.01" 
+                            required
+                        >
+                    </div>
+
+                    <button type="submit" class="btn btn-primary" style="width: 100%;">
+                        Generate OTI
+                    </button>
+                </form>
+
+                <div id="billingMessage"></div>
+            </div>
+        </div>
+
+        <!-- Verify Section -->
+        <div id="verifySection" class="section">
+            <div class="card">
+                <button class="btn btn-secondary" onclick="showSection('home')" style="margin-bottom: 20px; width: auto;">
+                    ← Back to Home
+                </button>
+
+                <h2 style="color: #667eea; margin-bottom: 20px;">View Receipt</h2>
+
+                <form id="verifyForm" onsubmit="verifyOTI(event)">
+                    <div class="form-group">
+                        <label for="otiInput">Enter Your OTI</label>
+                        <input 
+                            type="text" 
+                            id="otiInput" 
+                            placeholder="Enter your 8-character OTI" 
+                            required
+                            maxlength="8"
+                            style="text-transform: uppercase;"
+                        >
+                    </div>
+
+                    <button type="submit" class="btn btn-primary" style="width: 100%;">
+                        View Receipt
+                    </button>
+                </form>
+
+                <div id="verifyMessage"></div>
+                <div id="receiptDisplay"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Store bills in browser's local storage (data stays on YOUR computer only)
+        function saveBill(oti, amount, time) {
+            const bills = JSON.parse(localStorage.getItem('bills') || '{}');
+            bills[oti] = {
+                amount: amount,
+                time: time
+            };
+            localStorage.setItem('bills', JSON.stringify(bills));
+        }
+
+        // Get bill from local storage
+        function getBill(oti) {
+            const bills = JSON.parse(localStorage.getItem('bills') || '{}');
+            return bills[oti] || null;
+        }
+
+        // Generate random OTI (One-Time Identifier)
+        function generateOTI() {
+            const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+            let oti = '';
+            for (let i = 0; i < 8; i++) {
+                oti += chars.charAt(Math.floor(Math.random() * chars.length));
+            }
+            return oti;
+        }
+
+        // Get current date and time
+        function getCurrentDateTime() {
+            const now = new Date();
+            const day = String(now.getDate()).padStart(2, '0');
+            const month = String(now.getMonth() + 1).padStart(2, '0');
+            const year = now.getFullYear();
+            const hours = String(now.getHours()).padStart(2, '0');
+            const minutes = String(now.getMinutes()).padStart(2, '0');
+            const seconds = String(now.getSeconds()).padStart(2, '0');
+            return `${day}-${month}-${year} ${hours}:${minutes}:${seconds}`;
+        }
+
+        // Show different sections
+        function showSection(section) {
+            document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+            
+            if (section === 'home') {
+                document.getElementById('homeSection').classList.add('active');
+            } else if (section === 'billing') {
+                document.getElementById('billingSection').classList.add('active');
+                document.getElementById('billingForm').reset();
+                document.getElementById('billingMessage').innerHTML = '';
+            } else if (section === 'verify') {
+                document.getElementById('verifySection').classList.add('active');
+                document.getElementById('verifyForm').reset();
+                document.getElementById('verifyMessage').innerHTML = '';
+                document.getElementById('receiptDisplay').innerHTML = '';
+            }
+        }
+
+        // Generate bill
+        function generateBill(event) {
+            event.preventDefault();
+            
+            const phone = document.getElementById('phone').value;
+            const amount = parseFloat(document.getElementById('amount').value);
+            
+            // Validate inputs
+            if (phone.length !== 10 || isNaN(amount) || amount <= 0) {
+                document.getElementById('billingMessage').innerHTML = 
+                    '<div class="message error">Please enter valid phone number and amount!</div>';
+                return;
+            }
+            
+            // Generate OTI
+            const oti = generateOTI();
+            const time = getCurrentDateTime();
+            
+            // Save bill (phone number is NOT saved!)
+            saveBill(oti, amount, time);
+            
+            // Clear the form (removes phone number from memory)
+            document.getElementById('billingForm').reset();
+            
+            // Show success message with OTI
+            document.getElementById('billingMessage').innerHTML = `
+                <div class="message success">
+                    Bill created successfully!
+                </div>
+                <div class="oti-display">
+                    <h3>Your One-Time Identifier:</h3>
+                    <div class="oti-code">${oti}</div>
+                    <p class="oti-note">⚠️ Save this OTI to view your receipt later!</p>
+                    <button class="btn btn-secondary" style="margin-top: 15px;" onclick="copyOTI('${oti}')">
+                        Copy OTI
+                    </button>
+                </div>
+            `;
+        }
+
+        // Copy OTI to clipboard
+        function copyOTI(oti) {
+            navigator.clipboard.writeText(oti).then(() => {
+                alert('OTI copied to clipboard!');
+            });
+        }
+
+        // Verify OTI and show receipt
+        function verifyOTI(event) {
+            event.preventDefault();
+            
+            const oti = document.getElementById('otiInput').value.toUpperCase().trim();
+            
+            if (!oti) {
+                document.getElementById('verifyMessage').innerHTML = 
+                    '<div class="message error">Please enter an OTI!</div>';
+                return;
+            }
+            
+            // Get bill from storage
+            const bill = getBill(oti);
+            
+            if (!bill) {
+                document.getElementById('verifyMessage').innerHTML = 
+                    '<div class="message error">Invalid OTI. Please check and try again.</div>';
+                document.getElementById('receiptDisplay').innerHTML = '';
+                return;
+            }
+            
+            // Show receipt
+            document.getElementById('verifyMessage').innerHTML = '';
+            document.getElementById('receiptDisplay').innerHTML = `
+                <div class="receipt-card">
+                    <div class="receipt-header">
+                        <h2>Bill Details</h2>
+                        <div class="receipt-icon">🧾</div>
+                    </div>
+                    
+                    <div class="receipt-row">
+                        <span class="label">OTI:</span>
+                        <span class="value">${oti}</span>
+                    </div>
+                    
+                    <div class="receipt-row">
+                        <span class="label">Amount:</span>
+                        <span class="value amount">₹${bill.amount.toFixed(2)}</span>
+                    </div>
+                    
+                    <div class="receipt-row">
+                        <span class="label">Date & Time:</span>
+                        <span class="value">${bill.time}</span>
+                    </div>
+                    
+                    <div class="receipt-footer">
+                        <p>✅ Payment verified</p>
+                        <p style="color: #666; font-size: 0.9rem;">🔒 No personal information stored</p>
+                    </div>
+                    
+                    <button class="btn btn-secondary" style="width: 100%; margin-top: 15px;" onclick="window.print()">
+                        Print Receipt
+                    </button>
+                </div>
+            `;
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,30 @@
+body {
+    font-family: Arial;
+    margin: 40px;
+    background-color: #f4f4f4;
+}
+
+h1, h2 {
+    color: #333;
+}
+
+input {
+    padding: 8px;
+    width: 250px;
+}
+
+input[type=submit] {
+    background-color: #2c7be5;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+a {
+    margin-right: 10px;
+}
+
+.privacy {
+    color: green;
+    font-weight: bold;
+}
